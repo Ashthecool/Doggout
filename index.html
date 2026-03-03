@@ -1,23 +1,4 @@
-<!DOCTYPE html> <!-- Standard HTML declaration -->
-<html lang="en"> <!-- Sets language to English -->
-<head> <!-- Head section: metadata and links -->
-    <meta charset="UTF-8"> <!-- UTF-8 encoding: supports all Unicode, languages, symbols, emojis -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Controls page size and scaling on mobile devices -->
-    <title>Doggout</title> <!-- Sets the webpage name -->
-    <link rel="stylesheet" href="st.css"> <!-- Connects CSS file for design, layout, and colors -->
-    <script src="js.js" defer></script> <!-- Loads JavaScript file; defer = runs after HTML loads -->
-</head> <!-- Ends head section -->
-<body> <!-- Starts visible part of webpage -->
-    <h1>Doggout</h1> <!-- Main heading - biggest heading size -->
-    <div class="box"> <!-- Creates container div for grouping related elements -->
-        <h2>last walk was at<h1>X</h1> for <h1>Y</h1> minutes</h2> <!-- Shows walk time info with placeholders X and Y -->
-        <h1>Did he poop: <h1>yes/no</h1></h1> <!-- Shows poop status with placeholder -->
-    </div> <!-- Closes the div container -->
-    <button class="dogOut">I am taking the dog out</button> <!-- Clickable button to track dog going out -->
-</body> <!-- Ends visible part of webpage -->
-</html> <!-- Ends entire HTML document -->
-=======
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -27,7 +8,6 @@
     <link rel="stylesheet" href="st.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
 
-    <!-- App-like typography: bold display + clean body text. -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
@@ -35,18 +15,17 @@
     <script src="js.js" defer></script>
 </head>
 <body>
-    <!-- Outer shell keeps a phone silhouette on desktop screens. -->
     <div class="app-shell">
         <div class="phone-frame">
             <div class="phone-screen">
                 <header class="app-header">
                     <div class="status-bar">
-                        <span>9:41</span>
+                        <span id="clockValue">--:--</span>
                         <span id="walkState" class="state-pill">Ready</span>
                     </div>
 
                     <div class="brand-row">
-                        <img src="assets/mascot_logo.png" alt="Doggout mascot" class="logo">
+                        <img id="brandLogo" src="assets/mascot_logo.png" alt="Doggout mascot" class="logo">
                         <div>
                             <p class="overline">DOGGOUT</p>
                             <h1>Walk Time</h1>
@@ -55,50 +34,117 @@
                 </header>
 
                 <main class="app-main">
-                    <section class="hero-card" aria-label="Walk action">
-                        <p class="hero-kicker">Today&apos;s mission</p>
-                        <h2>Take your dog outside</h2>
-                        <p class="hero-copy">Tap to start tracking this walk and potty break.</p>
-                        <button id="walkToggle" class="primary-btn" type="button">Start Walk</button>
+                    <section class="app-view walk-view is-active" data-view="walk">
+                        <section class="hero-card" aria-label="Walk action">
+                            <p class="hero-kicker">Today&apos;s mission</p>
+                            <h2>Take your dog outside</h2>
+                            <p class="hero-copy">Tap to start tracking this walk and potty break.</p>
+                            <button id="walkToggle" class="primary-btn" type="button">Start Walk</button>
+                        </section>
+
+                        <section class="stats-grid" aria-label="Walk stats">
+                            <article class="stat-card">
+                                <p class="label">Last walk</p>
+                                <p id="lastWalkValue" class="value">No walks yet</p>
+                            </article>
+                            <article class="stat-card">
+                                <p class="label">Duration</p>
+                                <p id="durationValue" class="value">0:00</p>
+                            </article>
+                            <article class="stat-card">
+                                <p class="label">Distance</p>
+                                <p id="distanceValue" class="value">0 m</p>
+                            </article>
+                            <article class="stat-card">
+                                <p class="label">Poop status</p>
+                                <p id="poopStatusValue" class="value">Unknown</p>
+                            </article>
+                            <article class="stat-card">
+                                <p class="label">Points</p>
+                                <p id="pointsValue" class="value">0</p>
+                            </article>
+                            <article class="stat-card">
+                                <p class="label">Bags left</p>
+                                <p id="bagsValue" class="value">12</p>
+                            </article>
+                            <article class="stat-card">
+                                <p class="label">Mood</p>
+                                <p id="moodValue" class="value">Ready</p>
+                            </article>
+                        </section>
+
+                        <section class="goal-reel" aria-label="Avatar goals">
+                            <article class="goal-card" id="goalCardOne">
+                                <img id="goalImageOne" src="assets/doggo_1.png" alt="Goal image one">
+                                <div class="goal-content">
+                                    <p id="goalTitleOne" class="goal-title">Goal One</p>
+                                    <p id="goalStatusOne" class="goal-status">Reach points total</p>
+                                    <p id="goalPointsOne" class="goal-points">0 / 0</p>
+                                    <div class="goal-progress"><span id="goalProgressOne"></span></div>
+                                    <button id="goalButtonOne" class="goal-button" type="button">View Goal</button>
+                                </div>
+                            </article>
+
+                            <article class="goal-card" id="goalCardTwo">
+                                <img id="goalImageTwo" src="assets/doggo_2.png" alt="Goal image two">
+                                <div class="goal-content">
+                                    <p id="goalTitleTwo" class="goal-title">Goal Two</p>
+                                    <p id="goalStatusTwo" class="goal-status">Reach points total</p>
+                                    <p id="goalPointsTwo" class="goal-points">0 / 0</p>
+                                    <div class="goal-progress"><span id="goalProgressTwo"></span></div>
+                                    <button id="goalButtonTwo" class="goal-button" type="button">View Goal</button>
+                                </div>
+                            </article>
+                        </section>
+
+                        <section class="map-panel" aria-label="Live route map">
+                            <div class="panel-row">
+                                <h2>Live Route</h2>
+                                <span id="liveIndicator" class="live-indicator">GPS Off</span>
+                            </div>
+                            <div id="map"></div>
+                            <p id="sessionSummary" class="session-summary">No session saved yet.</p>
+                        </section>
                     </section>
 
-                    <section class="stats-grid" aria-label="Walk stats">
-                        <article class="stat-card">
-                            <p class="label">Last walk</p>
-                            <p class="value">6:30 PM</p>
-                        </article>
-                        <article class="stat-card">
-                            <p class="label">Duration</p>
-                            <p class="value">24 min</p>
-                        </article>
-                        <article class="stat-card">
-                            <p class="label">Poop status</p>
-                            <p class="value">Yes</p>
-                        </article>
-                        <article class="stat-card">
-                            <p class="label">Mood</p>
-                            <p class="value">Happy</p>
-                        </article>
+                    <section class="app-view history-view" data-view="history">
+                        <section class="history-panel">
+                            <h2>History</h2>
+                            <p id="historySummary" class="history-summary">No walks recorded yet.</p>
+                            <ul id="historyList" class="history-list"></ul>
+                        </section>
                     </section>
 
-                    <section class="photo-reel" aria-label="Dog photos">
-                        <img src="assets/doggo_1.png" alt="Doggo portrait one">
-                        <img src="assets/doggo_2.png" alt="Doggo portrait two">
+                    <section class="app-view profile-view" data-view="profile">
+                        <section class="profile-card">
+                            <img id="profileAvatar" src="assets/mascot_logo.png" alt="Current avatar">
+                            <h2 id="profileAvatarName">Mascot</h2>
+                            <p class="profile-subtitle">Your selected avatar</p>
+                            <div class="profile-metrics">
+                                <p><strong>Points:</strong> <span id="profilePointsValue">0</span></p>
+                                <p><strong>Bags left:</strong> <span id="profileBagsValue">12</span></p>
+                                <p><strong>Total walks:</strong> <span id="profileWalkCount">0</span></p>
+                            </div>
+                        </section>
                     </section>
 
-                    <section class="map-panel" aria-label="Live route map">
-                        <div class="panel-row">
-                            <h2>Live Route</h2>
-                            <span class="live-indicator">Live</span>
-                        </div>
-                        <div id="map"></div>
+                    <section class="app-view shop-view" data-view="shop">
+                        <section class="shop-panel">
+                            <div class="panel-row">
+                                <h2>P Shop</h2>
+                                <span class="live-indicator">Points: <span id="shopPointsValue">0</span></span>
+                            </div>
+                            <p class="shop-note">Buy or equip avatars using your walk points.</p>
+                            <div id="shopGrid" class="shop-grid"></div>
+                        </section>
                     </section>
                 </main>
 
                 <nav class="tab-bar" aria-label="Main app tabs">
-                    <button class="tab is-active" type="button">Walk</button>
-                    <button class="tab" type="button">History</button>
-                    <button class="tab" type="button">Profile</button>
+                    <button class="tab is-active" data-tab="walk" type="button">Walk</button>
+                    <button class="tab" data-tab="history" type="button">History</button>
+                    <button class="tab" data-tab="profile" type="button">Profile</button>
+                    <button class="tab" data-tab="shop" type="button">P Shop</button>
                 </nav>
             </div>
         </div>

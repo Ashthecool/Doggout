@@ -1,14 +1,12 @@
-﻿:root {
+:root {
     --ink: #142127;
     --muted: #5a6a74;
     --surface: #ffffff;
-    --surface-soft: #f6fafb;
     --line: #dbe5ea;
     --orange: #ef7f35;
     --orange-deep: #d7631a;
     --teal: #0f9a8b;
     --teal-soft: #cdeee8;
-    --night: #111827;
 }
 
 * {
@@ -29,7 +27,6 @@ body {
         linear-gradient(180deg, #f4f8fc 0%, #e8f2f5 100%);
 }
 
-/* Phone silhouette for desktop while keeping real app dimensions. */
 .app-shell {
     width: min(420px, 100%);
 }
@@ -107,11 +104,18 @@ h1 {
 .app-main {
     overflow: auto;
     padding: 0.2rem 1rem 1rem;
-    display: grid;
-    gap: 0.8rem;
 }
 
-/* Primary action card users see first when opening the app. */
+.app-view {
+    display: none;
+}
+
+.app-view.is-active {
+    display: grid;
+    gap: 0.8rem;
+    animation: fade-in 220ms ease-out;
+}
+
 .hero-card {
     background: linear-gradient(165deg, var(--orange) 0%, var(--orange-deep) 100%);
     color: #fff;
@@ -169,19 +173,6 @@ h1 {
     border: 1px solid var(--line);
     border-radius: 16px;
     padding: 0.75rem;
-    animation: rise 420ms ease both;
-}
-
-.stat-card:nth-child(2) {
-    animation-delay: 70ms;
-}
-
-.stat-card:nth-child(3) {
-    animation-delay: 130ms;
-}
-
-.stat-card:nth-child(4) {
-    animation-delay: 190ms;
 }
 
 .label {
@@ -199,25 +190,96 @@ h1 {
     font-weight: 700;
 }
 
-.photo-reel {
+.goal-reel {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.62rem;
 }
 
-.photo-reel img {
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
+.goal-card {
+    position: relative;
+    overflow: hidden;
     border-radius: 14px;
+    min-height: 186px;
     box-shadow: 0 12px 22px rgba(20, 33, 39, 0.18);
 }
 
-.map-panel {
+.goal-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.goal-content {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: 0.58rem;
+    color: #fff;
+    background: linear-gradient(180deg, rgba(8, 16, 24, 0) 0%, rgba(8, 16, 24, 0.93) 62%);
+}
+
+.goal-title {
+    margin: 0;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.goal-status {
+    margin: 0.18rem 0 0;
+    font-size: 0.76rem;
+}
+
+.goal-points {
+    margin: 0.16rem 0 0;
+    font-size: 0.74rem;
+    color: #d8f4ef;
+}
+
+.goal-progress {
+    margin-top: 0.4rem;
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.28);
+    border-radius: 999px;
+}
+
+.goal-progress span {
+    display: block;
+    height: 100%;
+    width: 0%;
+    border-radius: 999px;
+    background: linear-gradient(170deg, var(--teal) 0%, #40ccb8 100%);
+    transition: width 180ms ease;
+}
+
+.goal-button {
+    margin-top: 0.45rem;
+    border: 0;
+    border-radius: 9px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #0b6b5f;
+    background: #d4f5ef;
+    padding: 0.33rem 0.48rem;
+    cursor: pointer;
+}
+
+.goal-button:disabled {
+    color: #516a70;
+    background: #cdd9dd;
+    cursor: default;
+}
+
+.map-panel,
+.history-panel,
+.profile-card,
+.shop-panel {
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: 16px;
-    padding: 0.68rem;
+    padding: 0.75rem;
 }
 
 .panel-row {
@@ -247,13 +309,138 @@ h1 {
     border-radius: 12px;
 }
 
+.session-summary {
+    margin: 0.56rem 0 0.12rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+.history-summary {
+    margin: 0.55rem 0 0.7rem;
+    color: var(--muted);
+    font-size: 0.88rem;
+}
+
+.history-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.52rem;
+}
+
+.history-item {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 0.62rem;
+    display: grid;
+    gap: 0.16rem;
+}
+
+.history-item time {
+    font-weight: 700;
+    font-size: 0.88rem;
+}
+
+.history-item p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.82rem;
+}
+
+.profile-card {
+    text-align: center;
+}
+
+#profileAvatar {
+    width: 98px;
+    height: 98px;
+    border-radius: 20px;
+    object-fit: cover;
+    margin: 0 auto 0.75rem;
+    box-shadow: 0 12px 22px rgba(20, 33, 39, 0.2);
+}
+
+.profile-subtitle {
+    margin: 0.38rem 0 0.65rem;
+    color: var(--muted);
+    font-size: 0.84rem;
+}
+
+.profile-metrics {
+    text-align: left;
+    display: grid;
+    gap: 0.35rem;
+}
+
+.profile-metrics p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.shop-note {
+    margin: 0.1rem 0 0.72rem;
+    color: var(--muted);
+    font-size: 0.84rem;
+}
+
+.shop-grid {
+    display: grid;
+    gap: 0.68rem;
+}
+
+.shop-item {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 0.62rem;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.56rem;
+}
+
+.shop-item img {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.shop-item h3 {
+    margin: 0;
+    font-size: 0.92rem;
+}
+
+.shop-item p {
+    margin: 0.15rem 0 0;
+    font-size: 0.76rem;
+    color: var(--muted);
+}
+
+.shop-item button {
+    border: 0;
+    border-radius: 10px;
+    background: linear-gradient(170deg, var(--teal) 0%, #138f9d 100%);
+    color: #fff;
+    font-size: 0.76rem;
+    font-weight: 700;
+    padding: 0.45rem 0.55rem;
+    cursor: pointer;
+}
+
+.shop-item button:disabled {
+    background: #c7d7de;
+    color: #50616a;
+    cursor: default;
+}
+
 .tab-bar {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 0.45rem;
     background: rgba(246, 251, 254, 0.94);
     border-top: 1px solid var(--line);
-    padding: 0.7rem 0.9rem 0.9rem;
+    padding: 0.7rem 0.7rem 0.9rem;
 }
 
 .tab {
@@ -261,8 +448,8 @@ h1 {
     background: #fff;
     color: #6a7680;
     border-radius: 12px;
-    padding: 0.52rem 0.4rem;
-    font-size: 0.84rem;
+    padding: 0.52rem 0.35rem;
+    font-size: 0.78rem;
     font-weight: 700;
     cursor: pointer;
 }
@@ -273,12 +460,7 @@ h1 {
     background: linear-gradient(170deg, var(--teal) 0%, #138f9d 100%);
 }
 
-/* Visual feedback when a walk is currently active. */
-body.walking .state-pill {
-    color: #fff;
-    background: linear-gradient(170deg, var(--teal) 0%, #138f9d 100%);
-}
-
+body.walking .state-pill,
 body.walking .live-indicator {
     color: #fff;
     background: linear-gradient(170deg, var(--teal) 0%, #138f9d 100%);
@@ -296,10 +478,10 @@ body.walking .live-indicator {
     }
 }
 
-@keyframes rise {
+@keyframes fade-in {
     from {
         opacity: 0;
-        transform: translateY(8px);
+        transform: translateY(6px);
     }
 
     to {
@@ -308,24 +490,22 @@ body.walking .live-indicator {
     }
 }
 
-@media (max-width: 520px) {
-    body {
-        padding: 0;
-    }
+body.device-mobile {
+    padding: 0;
+}
 
-    .app-shell {
-        width: 100%;
-        height: 100dvh;
-    }
+body.device-mobile .app-shell {
+    width: 100%;
+    height: 100dvh;
+}
 
-    .phone-frame {
-        height: 100%;
-        border-radius: 0;
-        padding: 0;
-    }
+body.device-mobile .phone-frame {
+    height: 100%;
+    border-radius: 0;
+    padding: 0;
+}
 
-    .phone-screen {
-        min-height: 100dvh;
-        border-radius: 0;
-    }
+body.device-mobile .phone-screen {
+    min-height: 100dvh;
+    border-radius: 0;
 }
